@@ -24,4 +24,17 @@ class Run {
     final seconds = duration % 60;
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
+
+  factory Run.fromMap(Map<String, dynamic> map) {
+    return Run(
+      id: map['id'],
+      calories: map['calories'],
+      createdAt: DateTime.parse(map['created_at']),
+      description: map['description'],
+      distance: map['distance'],
+      duration: map['duration'],
+      heartRate: map['heartRate'],
+      type: map['type'],
+    );
+  }
 }
