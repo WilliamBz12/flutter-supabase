@@ -28,8 +28,14 @@ class RemoteRunRepository implements RunRepository {
   }
 
   @override
-  Future<bool> updateRun(Run run) {
-    // TODO: implement updateRun
-    throw UnimplementedError();
+  Future<void> updateRun(Run run) async {
+    await client
+        .from('runs')
+        .update(run.toMap())
+        .eq(
+          'id',
+          run.id ?? 0,
+        )
+        .select();
   }
 }

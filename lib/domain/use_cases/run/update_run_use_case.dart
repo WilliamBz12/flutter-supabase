@@ -7,7 +7,7 @@ class UpdateRunUseCase {
 
   final RunRepository _repository;
 
-  Future<bool> call(Run run) async {
+  Future<void> call(Run run) async {
     try {
       return await _repository.updateRun(run);
     } catch (e) {
