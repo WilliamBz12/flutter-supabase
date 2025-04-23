@@ -7,7 +7,7 @@ class AddRunUseCase {
 
   final RunRepository _repository;
 
-  Future<int> call(Run run) async {
+  Future<void> call(Run run) async {
     try {
       return await _repository.addRun(run);
     } catch (e) {

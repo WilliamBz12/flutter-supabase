@@ -10,9 +10,8 @@ class RemoteRunRepository implements RunRepository {
   });
 
   @override
-  Future<int> addRun(Run run) {
-    // TODO: implement addRun
-    throw UnimplementedError();
+  Future<void> addRun(Run run) async {
+    await client.from('runs').insert([run.toMap()]);
   }
 
   @override

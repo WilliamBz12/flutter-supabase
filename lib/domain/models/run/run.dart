@@ -37,4 +37,15 @@ class Run {
       type: map['type'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type,
+      'distance': distance,
+      'description': description,
+      'calories': calories,
+      'duration': duration,
+      'heartRate': heartRate,
+    };
+  }
 }
