@@ -3,11 +3,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sqlite_offline/config/supabase.dart';
 
 import 'config/dependencies.dart';
 import 'ui/home/widgets/home_screen.dart';
 
-void main() {
+void main() async {
+  await SupabaseConfig.init();
+
   runApp(
     MultiProvider(
       providers: providersLocal,
