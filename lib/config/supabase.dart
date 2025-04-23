@@ -7,4 +7,6 @@ class SupabaseConfig {
       anonKey: const String.fromEnvironment('SUPABASE_KEY'),
     );
   }
+
+  SupabaseClient get client => Supabase.instance.client;
 }

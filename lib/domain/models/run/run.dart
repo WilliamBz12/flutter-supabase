@@ -31,7 +31,7 @@ class Run {
       calories: map['calories'],
       createdAt: DateTime.parse(map['created_at']),
       description: map['description'],
-      distance: map['distance'],
+      distance: (map['distance'] as num).toDouble(),
       duration: map['duration'],
       heartRate: map['heartRate'],
       type: map['type'],
