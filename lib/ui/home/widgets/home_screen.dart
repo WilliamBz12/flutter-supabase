@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import '../../../domain/models/run/run.dart';
 import '../../run/create_run_screen.dart';
@@ -21,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => runViewModel.loadRuns());
+    // Future.microtask(() => runViewModel.loadRuns());
   }
 
   void _navigateToCreateRun({Run? existingRun}) {
@@ -137,28 +138,26 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: runViewModel.runs == null
-                ? const Center(child: CircularProgressIndicator())
-                : runViewModel.runs!.isEmpty
-                    ? const Center(child: Text('Nenhuma corrida registrada'))
-                    : ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: runViewModel.runs!.length,
-                        itemBuilder: (context, index) {
-                          final run = runViewModel.runs![index];
-                          return RunCard(
-                            run: run,
-                            onEdit: () =>
-                                _navigateToCreateRun(existingRun: run),
-                            onDelete: () => runViewModel.deleteRun(run.id!),
-                          );
-                        },
-                      ),
+      body: PagedListView<int, Run>(
+        padding: const EdgeInsets.all(20),
+        state: runViewModel.pagingState,
+        fetchNextPage: runViewModel.fetchNextPage,
+        builderDelegate: PagedChildBuilderDelegate(
+          firstPageErrorIndicatorBuilder: (context) => Text('Ocorreu um erro'),
+          firstPageProgressIndicatorBuilder: (context) => Center(
+            child: CircularProgressIndicator(),
           ),
-        ],
+          noItemsFoundIndicatorBuilder: (context) =>
+              Text('Sem itens cadastrados'),
+          newPageProgressIndicatorBuilder: (context) => Center(
+            child: CircularProgressIndicator(),
+          ),
+          itemBuilder: (context, item, index) => RunCard(
+            run: item,
+            onEdit: () => _navigateToCreateRun(existingRun: item),
+            onDelete: () => runViewModel.deleteRun(item.id!),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _navigateToCreateRun(),

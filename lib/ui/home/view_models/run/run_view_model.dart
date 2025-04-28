@@ -29,7 +29,7 @@ class RunViewModel extends ChangeNotifier {
   List<Run>? _runs;
   List<Run>? get runs => _runs;
 
-  final perPage = 5;
+  final perPage = 2;
 
   void refresh() {
     _pagingState = _pagingState.reset();
@@ -37,12 +37,16 @@ class RunViewModel extends ChangeNotifier {
     loadRuns(1);
   }
 
+  void fetchNextPage() {
+    final currentPage = _pagingState.keys == null ? 0 : _pagingState.keys!.last;
+    loadRuns(currentPage + 1);
+  }
+
   Future<void> loadRuns(int page) async {
     _pagingState = _pagingState.copyWith(
       isLoading: true,
       error: null,
     );
-    notifyListeners();
 
     try {
       final result = await _getRunsUseCase(
@@ -50,15 +54,19 @@ class RunViewModel extends ChangeNotifier {
         perPage: perPage,
       );
 
-      _pagingState =
-          _pagingState.copyWith(error: null, isLoading: false, pages: [
-        ...(_pagingState.pages ?? []),
-        result,
-      ], keys: [
-        ...(_pagingState.keys ?? []),
-        page,
-      ]);
-
+      _pagingState = _pagingState.copyWith(
+        error: null,
+        isLoading: false,
+        pages: [
+          ...(_pagingState.pages ?? []),
+          result,
+        ],
+        keys: [
+          ...(_pagingState.keys ?? []),
+          page,
+        ],
+        hasNextPage: result.length == perPage,
+      );
       notifyListeners();
     } catch (e) {
       _pagingState = _pagingState.copyWith(

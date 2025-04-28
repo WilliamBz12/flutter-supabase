@@ -36,11 +36,11 @@ class RemoteRunRepository implements RunRepository {
         .select()
         .range(
           perPage * (page - 1),
-          perPage * page,
+          perPage * page - 1,
         )
         .order(
           'created_at',
-          ascending: true,
+          ascending: false,
         );
     final runs = result.map((e) => Run.fromMap(e)).toList();
     return runs;
