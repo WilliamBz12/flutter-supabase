@@ -46,4 +46,11 @@ class MockRunRepository implements RunRepository {
     }
     return false;
   }
+
+  @override
+  Future<List<Run>> getPaginatedRuns(
+      {required int page, required int perPage}) {
+    // TODO: implement getPaginatedRuns
+    throw UnimplementedError();
+  }
 }

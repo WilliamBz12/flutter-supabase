@@ -7,9 +7,15 @@ class GetRunsUseCase {
 
   final RunRepository _repository;
 
-  Future<List<Run>> call() async {
+  Future<List<Run>> call({
+    required int page,
+    required int perPage,
+  }) async {
     try {
-      return await _repository.getRuns();
+      return await _repository.getPaginatedRuns(
+        page: page,
+        perPage: perPage,
+      );
     } catch (e) {
       debugPrint('Erro ao buscar corridas: $e');
       rethrow;

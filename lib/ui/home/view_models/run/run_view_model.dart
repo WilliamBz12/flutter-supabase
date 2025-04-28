@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../domain/models/run/run.dart';
 import '../../../../domain/use_cases/run/add_run_use_case.dart';
@@ -22,12 +23,49 @@ class RunViewModel extends ChangeNotifier {
   final UpdateRunUseCase _updateRunUseCase;
   final DeleteRunUseCase _deleteRunUseCase;
 
+  var _pagingState = PagingState<int, Run>();
+  PagingState<int, Run> get pagingState => _pagingState;
+
   List<Run>? _runs;
   List<Run>? get runs => _runs;
 
-  Future<void> loadRuns() async {
-    _runs = await _getRunsUseCase();
+  final perPage = 5;
+
+  void refresh() {
+    _pagingState = _pagingState.reset();
     notifyListeners();
+    loadRuns(1);
+  }
+
+  Future<void> loadRuns(int page) async {
+    _pagingState = _pagingState.copyWith(
+      isLoading: true,
+      error: null,
+    );
+    notifyListeners();
+
+    try {
+      final result = await _getRunsUseCase(
+        page: page,
+        perPage: perPage,
+      );
+
+      _pagingState =
+          _pagingState.copyWith(error: null, isLoading: false, pages: [
+        ...(_pagingState.pages ?? []),
+        result,
+      ], keys: [
+        ...(_pagingState.keys ?? []),
+        page,
+      ]);
+
+      notifyListeners();
+    } catch (e) {
+      _pagingState = _pagingState.copyWith(
+        error: e,
+        isLoading: false,
+      );
+    }
   }
 
   Future<void> addRun(
@@ -48,16 +86,16 @@ class RunViewModel extends ChangeNotifier {
       createdAt: DateTime.now(),
     );
     await _addRunUseCase(run);
-    await loadRuns();
+    refresh();
   }
 
   Future<void> updateRun(Run run) async {
     await _updateRunUseCase(run);
-    await loadRuns();
+    refresh();
   }
 
   Future<void> deleteRun(int id) async {
     await _deleteRunUseCase(id);
-    await loadRuns();
+    refresh();
   }
 }
