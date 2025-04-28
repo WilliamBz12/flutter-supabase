@@ -15,9 +15,8 @@ class RemoteRunRepository implements RunRepository {
   }
 
   @override
-  Future<bool> deleteRun(int id) {
-    // TODO: implement deleteRun
-    throw UnimplementedError();
+  Future<void> deleteRun(int id) async {
+    await client.from('runs').delete().eq('id', id);
   }
 
   @override

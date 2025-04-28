@@ -6,7 +6,7 @@ class DeleteRunUseCase {
 
   final RunRepository _repository;
 
-  Future<bool> call(int id) async {
+  Future<void> call(int id) async {
     try {
       return await _repository.deleteRun(id);
     } catch (e) {

@@ -4,5 +4,5 @@ abstract class RunRepository {
   Future<void> addRun(Run run);
   Future<List<Run>> getRuns();
   Future<void> updateRun(Run run);
-  Future<bool> deleteRun(int id);
+  Future<void> deleteRun(int id);
 }
