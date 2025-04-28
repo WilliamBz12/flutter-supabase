@@ -27,6 +27,26 @@ class RemoteRunRepository implements RunRepository {
   }
 
   @override
+  Future<List<Run>> getPaginatedRuns({
+    required int page,
+    required int perPage,
+  }) async {
+    final result = await client
+        .from('runs')
+        .select()
+        .range(
+          perPage * (page - 1),
+          perPage * page,
+        )
+        .order(
+          'created_at',
+          ascending: true,
+        );
+    final runs = result.map((e) => Run.fromMap(e)).toList();
+    return runs;
+  }
+
+  @override
   Future<void> updateRun(Run run) async {
     await client
         .from('runs')
