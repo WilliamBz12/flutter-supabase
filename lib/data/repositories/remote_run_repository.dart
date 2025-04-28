@@ -57,4 +57,13 @@ class RemoteRunRepository implements RunRepository {
         )
         .select();
   }
+
+  @override
+  SupabaseStreamFilterBuilder listenRuns() {
+    final result = client.from('runs').stream(
+      primaryKey: ['id'],
+    );
+
+    return result;
+  }
 }

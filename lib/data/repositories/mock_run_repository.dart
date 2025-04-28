@@ -1,3 +1,5 @@
+import 'package:supabase/src/supabase_stream_builder.dart';
+
 import '../../domain/models/run/run.dart';
 import 'run_repository.dart';
 
@@ -51,6 +53,12 @@ class MockRunRepository implements RunRepository {
   Future<List<Run>> getPaginatedRuns(
       {required int page, required int perPage}) {
     // TODO: implement getPaginatedRuns
+    throw UnimplementedError();
+  }
+
+  @override
+  SupabaseStreamFilterBuilder listenRuns() {
+    // TODO: implement listenRuns
     throw UnimplementedError();
   }
 }

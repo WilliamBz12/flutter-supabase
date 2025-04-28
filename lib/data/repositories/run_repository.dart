@@ -1,4 +1,5 @@
 import 'package:sqlite_offline/domain/models/run/run.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class RunRepository {
   Future<void> addRun(Run run);
@@ -9,4 +10,5 @@ abstract class RunRepository {
     required int page,
     required int perPage,
   });
+  SupabaseStreamFilterBuilder listenRuns();
 }
