@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Future.microtask(() => runViewModel.loadRuns());
+    Future.microtask(() => runViewModel.listen());
   }
 
   void _navigateToCreateRun({Run? existingRun}) {
@@ -137,6 +137,14 @@ class _HomeScreenState extends State<HomeScreen> {
           color: const Color(0xFFB6FF02),
         ),
         centerTitle: true,
+        actions: [
+          Text(
+            '${runViewModel.countRuns} Corridas ',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )
+        ],
       ),
       body: PagedListView<int, Run>(
         padding: const EdgeInsets.all(20),

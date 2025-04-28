@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:sqlite_offline/domain/use_cases/run/listen_run_use_case.dart';
 
 import '../../../../domain/models/run/run.dart';
 import '../../../../domain/use_cases/run/add_run_use_case.dart';
@@ -13,15 +14,18 @@ class RunViewModel extends ChangeNotifier {
     required GetRunsUseCase getRunsUseCase,
     required UpdateRunUseCase updateRunUseCase,
     required DeleteRunUseCase deleteRunUseCase,
+    required ListenRunsUseCase listenRunsUseCase,
   })  : _addRunUseCase = addRunUseCase,
         _getRunsUseCase = getRunsUseCase,
         _updateRunUseCase = updateRunUseCase,
+        _listenRunsUseCase = listenRunsUseCase,
         _deleteRunUseCase = deleteRunUseCase;
 
   final AddRunUseCase _addRunUseCase;
   final GetRunsUseCase _getRunsUseCase;
   final UpdateRunUseCase _updateRunUseCase;
   final DeleteRunUseCase _deleteRunUseCase;
+  final ListenRunsUseCase _listenRunsUseCase;
 
   var _pagingState = PagingState<int, Run>();
   PagingState<int, Run> get pagingState => _pagingState;
@@ -29,11 +33,24 @@ class RunViewModel extends ChangeNotifier {
   List<Run>? _runs;
   List<Run>? get runs => _runs;
 
+  int _countRuns = 0;
+  int get countRuns => _countRuns;
+
   final perPage = 2;
+
+  void listen() {
+    final stream = _listenRunsUseCase();
+    stream.listen(
+      (event) {
+        _countRuns = event.length;
+        notifyListeners();
+      },
+    );
+  }
 
   void refresh() {
     _pagingState = _pagingState.reset();
-    notifyListeners();
+
     loadRuns(1);
   }
 

@@ -43,6 +43,7 @@ List<SingleChildWidget> get providersLocal {
         getRunsUseCase: context.read(),
         updateRunUseCase: context.read(),
         deleteRunUseCase: context.read(),
+        listenRunsUseCase: context.read(),
       ),
     )
   ];
